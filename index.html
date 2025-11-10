@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Programming Lab Manual - TE Computer 2025-26</title>
+    
+    <!-- Prism.js for syntax highlighting (light theme) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    
+    <!-- jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #fafafa;
+            color: #202124;
+            line-height: 1.7;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e5e5;
+            padding: 30px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        
+        .header h1 {
+            font-size: 1.8em;
+            font-weight: 600;
+            color: #202124;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            font-size: 0.95em;
+            color: #5f6368;
+        }
+        
+        .toolbar {
+            display: flex;
+            gap: 15px;
+            padding: 20px 40px;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e5e5;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .search-container {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border: 1px solid #dfe1e5;
+            border-radius: 24px;
+            font-size: 15px;
+            transition: all 0.2s;
+            background: #ffffff;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #4285f4;
+            box-shadow: 0 1px 6px rgba(66,133,244,0.15);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #5f6368;
+        }
+        
+        .quick-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .quick-link {
+            padding: 6px 14px;
+            background: #f1f3f4;
+            border: none;
+            border-radius: 16px;
+            font-size: 13px;
+            color: #202124;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        
+        .quick-link:hover {
+            background: #e8eaed;
+        }
+        
+        .download-btn {
+            padding: 10px 24px;
+            background: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .download-btn:hover {
+            background: #3367d6;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+        
+        .content {
+            padding: 30px 40px 60px;
+        }
+        
+        .assignment {
+            margin-bottom: 50px;
+            padding: 30px;
+            background: #ffffff;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+        }
+        
+        .assignment-number {
+            display: inline-block;
+            background: #4285f4;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .assignment h2 {
+            font-size: 1.5em;
+            color: #202124;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .problem-statement {
+            background: #f8f9fa;
+            padding: 16px;
+            border-left: 3px solid #4285f4;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            color: #3c4043;
+        }
+        
+        .section-title {
+            font-size: 1.1em;
+            color: #202124;
+            margin: 25px 0 12px 0;
+            font-weight: 600;
+        }
+        
+        .code-block {
+            position: relative;
+            margin: 15px 0;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ffffff;
+            color: #5f6368;
+            border: 1px solid #dadce0;
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 10;
+            font-weight: 500;
+        }
+        
+        .copy-btn:hover {
+            background: #f8f9fa;
+            border-color: #5f6368;
+        }
+        
+        .copy-btn.copied {
+            background: #34a853;
+            color: white;
+            border-color: #34a853;
+        }
+        
+        pre {
+            margin: 0;
+            border-radius: 6px;
+            border: 1px solid #e5e5e5;
+            background: #f8f9fa;
+            max-height: 500px;
+            overflow: auto;
+        }
+        
+        pre code {
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            font-size: 13px;
+        }
+        
+        .io-box {
+            background: #f8f9fa;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 15px 0;
+        }
+        
+        .io-box h4 {
+            color: #3c4043;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+        
+        .features {
+            background: #e8f0fe;
+            border: 1px solid #d2e3fc;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 15px 0;
+        }
+        
+        .features h3 {
+            color: #1967d2;
+            font-size: 1em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .features ul {
+            margin-left: 20px;
+            color: #3c4043;
+        }
+        
+        .features li {
+            margin-bottom: 6px;
+            font-size: 0.92em;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #5f6368;
+            font-size: 1.1em;
+        }
+        
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.95);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .spinner {
+            border: 3px solid #f0f0f0;
+            border-top: 3px solid #4285f4;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading p {
+            margin-top: 20px;
+            color: #5f6368;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .header, .toolbar, .content {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+            
+            .assignment {
+                padding: 20px;
+            }
+            
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .quick-links {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Generating PDF...</p>
+    </div>
+    
+    <div class="container" id="mainContent">
+        <div class="header">
+            <h1>System Programming Lab Manual</h1>
+            <p>TE Computer Engineering • Semester I • 2025-26</p>
+        </div>
+        
+        <div class="toolbar">
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search assignments (try: 1, 2, assembler, macro, scheduling...)">
+            </div>
+            
+            <div class="quick-links">
+                <button class="quick-link" onclick="jumpToAssignment(1)">1</button>
+                <button class="quick-link" onclick="jumpToAssignment(2)">2</button>
+                <button class="quick-link" onclick="jumpToAssignment(3)">3</button>
+                <button class="quick-link" onclick="jumpToAssignment(4)">4</button>
+                <button class="quick-link" onclick="jumpToAssignment(5)">5</button>
+                <button class="quick-link" onclick="jumpToAssignment(6)">6</button>
+            </div>
+            
+            <button class="download-btn" onclick="downloadPDF()">
+                <span>📥</span>
+                <span>Download PDF</span>
+            </button>
+        </div>
+        
+        <div class="content" id="content">
+            
+            <!-- Assignment 1 -->
+            <div class="assignment" id="assignment-1" data-keywords="1 assembler pass-1 pass-i symbol table literal intermediate">
+                <span class="assignment-number">Assignment 1</span>
+                <h2>Two-Pass Assembler (Pass-I)</h2>
+                
+                <div class="problem-statement">
+                    <strong>Problem:</strong> Design suitable data structures and implement Pass-I of a two-pass assembler for a pseudo-machine using OOP features in C++. Implementation should consist of instructions from each category and assembler directives.
+                </div>
+                
+                <div class="features">
+                    <h3>Features:</h3>
+                    <ul>
+                        <li>✓ Object-oriented design with encapsulation</li>
+                        <li>✓ Generates Symbol Table (ST), Literal Table (LT), and Intermediate Code</li>
+                        <li>✓ Handles labels, instructions, and directives (START, END, DC)</li>
+                        <li>✓ Parameter replacement with positional indices</li>
+                    </ul>
+                </div>
+                
+                <div class="section-title">💻 C++ Code</div>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+#include &lt;sstream&gt;
+#include &lt;string&gt;
+#include &lt;unordered_map&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+struct SymEntry { string name; int addr; };
+struct LitEntry { string lit; int addr; };
+
+class PassOne {
+    unordered_map&lt;string,int&gt; opCode;
+    unordered_map&lt;string,int&gt; regCode;
+    vector&lt;SymEntry&gt; symtab;
+    vector&lt;LitEntry&gt; littab;
+    unordered_map&lt;string,int&gt; symIndex;
+    unordered_map&lt;string,int&gt; litIndex;
+    vector&lt;string&gt; im;
+    int lc = 0;
+
+    int addSymbolIfMissing(const string &amp;s) {
+        if (symIndex.count(s)) return symIndex[s];
+        SymEntry e{ s, -1 };
+        symtab.push_back(e);
+        int idx = (int)symtab.size()-1;
+        symIndex[s] = idx;
+        return idx;
+    }
+    
+    int addLiteralIfMissing(const string &amp;lit) {
+        if (litIndex.count(lit)) return litIndex[lit];
+        littab.push_back({lit, -1});
+        int idx = (int)littab.size()-1;
+        litIndex[lit] = idx;
+        return idx;
+    }
+
+public:
+    PassOne() {
+        opCode = { {"ADD",1}, {"SUB",2}, {"MUL",3}, {"MOV",4} };
+        regCode = { {"AREG",1}, {"BREG",2}, {"CREG",3}, {"DREG",4} };
+    }
+
+    void processFile(const string &amp;infile) {
+        ifstream fin(infile);
+        if (!fin) { cerr&lt;&lt;"Cannot open "&lt;&lt;infile&lt;&lt;"\n"; return; }
+
+        string line;
+        while (getline(fin, line)) {
+            if (line.empty()) continue;
+            stringstream ss;
+            for (char c : line) ss &lt;&lt; (c==','? ' ': c);
+            vector&lt;string&gt; toks; string t;
+            while (ss &gt;&gt; t) toks.push_back(t);
+
+            if (toks.empty()) continue;
+
+            if (toks[0] == "START") {
+                if (toks.size()&gt;=2) {
+                    lc = stoi(toks[1]);
+                    im.push_back("AD 1 " + to_string(lc));
+                } else {
+                    im.push_back("AD 1 0");
+                }
+                continue;
+            }
+
+            if (toks[0] == "END") {
+                im.push_back("AD 2");
+                break;
+            }
+
+            int idx = 0;
+            string label = "";
+            if (toks.size() &gt; 1 &amp;&amp; opCode.count(toks[0])==0
+                &amp;&amp; regCode.count(toks[0])==0
+                &amp;&amp; toks[0] != "DC" &amp;&amp; toks[0] != "START" &amp;&amp; toks[0] != "END") {
+                label = toks[0];
+                int si = addSymbolIfMissing(label);
+                symtab[si].addr = lc;
+                idx = 1;
+            }
+
+            string mnem = toks[idx];
+
+            if (mnem == "DC") {
+                string val = (idx+1 &lt; (int)toks.size() ? toks[idx+1] : "0");
+                im.push_back("DL 1 " + val);
+                lc += 1;
+                continue;
+            }
+
+            if (opCode.count(mnem)) {
+                string out = "IS " + to_string(opCode[mnem]);
+                int tokpos = idx+1;
+                if (tokpos &lt; (int)toks.size() &amp;&amp; regCode.count(toks[tokpos])) {
+                    out += " " + to_string(regCode[toks[tokpos]]);
+                    tokpos++;
+                } else {
+                    out += " 0";
+                }
+                if (tokpos &lt; (int)toks.size()) {
+                    string op = toks[tokpos];
+                    if (!op.empty() &amp;&amp; op[0] == '=') {
+                        int li = addLiteralIfMissing(op);
+                        out += " L" + to_string(li);
+                    } else if (all_of(op.begin(), op.end(), [](char c){ return isdigit(c) || c=='-'; })) {
+                        out += " C" + op;
+                    } else {
+                        int si = addSymbolIfMissing(op);
+                        out += " S" + to_string(si);
+                    }
+                } else {
+                    out += " 0";
+                }
+                im.push_back(out);
+                lc += 1;
+                continue;
+            }
+
+            im.push_back("?? (ignored) " + line);
+        }
+
+        for (size_t i = 0; i &lt; littab.size(); ++i) {
+            if (littab[i].addr == -1) littab[i].addr = lc++;
+        }
+    }
+
+    void writeFiles() {
+        ofstream imf("IM.txt"), stf("ST.txt"), ltf("LT.txt");
+        for (auto &amp;s : im) imf &lt;&lt; s &lt;&lt; "\n";
+        for (size_t i=0;i&lt;symtab.size();++i) {
+            stf &lt;&lt; i &lt;&lt; "\t" &lt;&lt; symtab[i].name &lt;&lt; "\t" &lt;&lt; symtab[i].addr &lt;&lt; "\n";
+        }
+        for (size_t i=0;i&lt;littab.size();++i) {
+            ltf &lt;&lt; i &lt;&lt; "\t" &lt;&lt; littab[i].lit &lt;&lt; "\t" &lt;&lt; littab[i].addr &lt;&lt; "\n";
+        }
+        imf.close(); stf.close(); ltf.close();
+    }
+};
+
+int main(){
+    PassOne p;
+    p.processFile("initial.txt");
+    p.writeFiles();
+    cout&lt;&lt;"Pass-I done. Files IM.txt, ST.txt, LT.txt generated.\n";
+}</code></pre>
+                </div>
+                
+                <div class="section-title">📝 Example Input (initial.txt)</div>
+                <div class="io-box">
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre><code class="language-none">START 100
+A MOV AREG B
+ADD BREG =5
+C DC 10
+END</code></pre>
+                    </div>
+                </div>
+                
+                <div class="section-title">📤 Expected Output</div>
+                <div class="io-box">
+                    <h4>IM.txt</h4>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre><code class="language-none">AD 1 100
+IS 4 1 S0
+IS 1 2 L0
+DL 1 10
+AD 2</code></pre>
+                    </div>
+                </div>
+                
+                <div class="io-box">
+                    <h4>ST.txt</h4>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre><code class="language-none">0	B	-1
+1	A	100
+2	C	102</code></pre>
+                    </div>
+                </div>
+                
+                <div class="io-box">
+                    <h4>LT.txt</h4>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre><code class="language-none">0	=5	103</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Assignment 2 -->
+            <div class="assignment" id="assignment-2" data-keywords="2 assembler pass-2 pass-ii machine code symbol resolution">
+                <span class="assignment-number">Assignment 2</span>
+                <h2>Two-Pass Assembler (Pass-II)</h2>
+                
+                <div class="problem-statement">
+                    <strong>Problem:</strong> Implement Pass-II of two-pass assembler for pseudo-machine using OOP features in C++. The output of Pass-I (intermediate file and symbol table) should be input for this assignment.
+                </div>
+                
+                <div class="features">
+                    <h3>Features:</h3>
+                    <ul>
+                        <li>✓ Resolves symbols and literals using Pass-I tables</li>
+                        <li>✓ Generates final machine code with addresses</li>
+                        <li>✓ Handles multiple operand formats (S#, L#, C#)</li>
+                        <li>✓ Produces formatted output with padding</li>
+                    </ul>
+                </div>
+                
+                <div class="section-title">💻 C++ Code</div>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+#include &lt;sstream&gt;
+#include &lt;string&gt;
+#include &lt;unordered_map&gt;
+#include &lt;vector&gt;
+#include &lt;iomanip&gt;
+
+using namespace std;
+
+string padNumber(int value, int width) {
+    stringstream ss;
+    ss &lt;&lt; setw(width) &lt;&lt; setfill('0') &lt;&lt; value;
+    return ss.str();
+}
+
+class PassTwo {
+public:
+    PassTwo(const string &amp;imFile, const string &amp;symFile,
+            const string &amp;litFile, const string &amp;outFile)
+        : imFilename(imFile), stFilename(symFile), 
+          ltFilename(litFile), outFilename(outFile) {}
+
+    void run() {
+        if (!loadSymbolTable()) return;
+        if (!loadLiteralTable()) return;
+        processIntermediateFile();
+    }
+
+private:
+    string imFilename, stFilename, ltFilename, outFilename;
+    unordered_map&lt;int,int&gt; symbolAddress;
+    unordered_map&lt;int,int&gt; literalAddress;
+
+    bool loadSymbolTable() {
+        ifstream fin(stFilename);
+        if (!fin) { cerr &lt;&lt; "Cannot open " &lt;&lt; stFilename &lt;&lt; "\n"; return false; }
+        while (true) {
+            int index; string name; int addr;
+            if (!(fin &gt;&gt; index &gt;&gt; name &gt;&gt; addr)) break;
+            symbolAddress[index] = addr;
+        }
+        fin.close();
+        return true;
+    }
+
+    bool loadLiteralTable() {
+        ifstream fin(ltFilename);
+        if (!fin) { cerr &lt;&lt; "Cannot open " &lt;&lt; ltFilename &lt;&lt; "\n"; return false; }
+        while (true) {
+            int index; string lit; int addr;
+            if (!(fin &gt;&gt; index &gt;&gt; lit &gt;&gt; addr)) break;
+            literalAddress[index] = addr;
+        }
+        fin.close();
+        return true;
+    }
+
+    int resolveOperand(const string &amp;token) {
+        if (token.empty()) return 0;
+        if (token[0] == 'S' || token[0] == 's') {
+            int idx = stoi(token.substr(1));
+            if (symbolAddress.count(idx)) return symbolAddress[idx];
+            return -1;
+        }
+        if (token[0] == 'L' || token[0] == 'l') {
+            int idx = stoi(token.substr(1));
+            if (literalAddress.count(idx)) return literalAddress[idx];
+            return -1;
+        }
+        if (token[0] == 'C' || token[0] == 'c') {
+            return stoi(token.substr(1));
+        }
+        if (all_of(token.begin(), token.end(), 
+            [](char ch){ return isdigit(ch) || ch=='-'; })) {
+            return stoi(token);
+        }
+        try { return stoi(token); } 
+        catch (...) { return -1; }
+    }
+
+    void processIntermediateFile() {
+        ifstream fin(imFilename);
+        ofstream fout(outFilename);
+        if (!fin) { cerr &lt;&lt; "Cannot open " &lt;&lt; imFilename &lt;&lt; "\n"; return; }
+        if (!fout) { cerr &lt;&lt; "Cannot open " &lt;&lt; outFilename &lt;&lt; "\n"; return; }
+
+        string line;
+        while (getline(fin, line)) {
+            if (line.empty()) continue;
+            stringstream ss(line);
+            vector&lt;string&gt; tokens;
+            string tok;
+            while (ss &gt;&gt; tok) tokens.push_back(tok);
+            if (tokens.empty()) continue;
+
+            string codeType = tokens[0];
+
+            if (codeType == "AD") {
+                continue;
+            }
+            else if (codeType == "IS") {
+                int opcode = 0, reg = 0;
+                string operandToken = "";
+
+                if (tokens.size() &gt;= 2) opcode = stoi(tokens[1]);
+                if (tokens.size() &gt;= 3) reg = stoi(tokens[2]);
+                if (tokens.size() &gt;= 4) {
+                    operandToken = tokens[3];
+                    if ((operandToken == "S" || operandToken == "L" || 
+                         operandToken == "C") &amp;&amp; tokens.size() &gt;= 5) {
+                        operandToken += tokens[4];
+                    }
+                }
+
+                int operandValue = 0;
+                if (!operandToken.empty()) 
+                    operandValue = resolveOperand(operandToken);
+
+                fout &lt;&lt; padNumber(opcode, 2) &lt;&lt; " " 
+                     &lt;&lt; padNumber(reg, 2) &lt;&lt; " " 
+                     &lt;&lt; operandValue &lt;&lt; "\n";
+            }
+            else if (codeType == "DL") {
+                int value = 0;
+                if (tokens.size() &gt;= 3) value = stoi(tokens[2]);
+                fout &lt;&lt; "00 00 " &lt;&lt; value &lt;&lt; "\n";
+            }
+        }
+
+        fin.close();
+        fout.close();
+        cout &lt;&lt; "Pass-II done. Output: " &lt;&lt; outFilename &lt;&lt; "\n";
+    }
+};
+
+int main() {
+    PassTwo assembler("IM.txt", "ST.txt", "LT.txt", "MachineCode.txt");
+    assembler.run();
+    return 0;
+}</code></pre>
+                </div>
+                
+                <div class="section-title">📝 Example Input (from Pass-I)</div>
+                <div class="io-box">
+                    <h4>IM.txt, ST.txt, LT.txt (from Assignment 1)</h4>
+                </div>
+                
+                <div class="section-title">📤 Expected Output</div>
+                <div class="io-box">
+                    <h4>MachineCode.txt</h4>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre><code class="language-none">04 01 100
+01 02 103
+00 00 10</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Assignment 3 -->
+            <div class="assignment" id="assignment-3" data-keywords="3 macro processor pass-1 pass-i mnt mdt ala">
+                <span class="assignment-number">Assignment 3</span>
+                <h2>Two-Pass Macro Processor (Pass-I)</h2>
+                
+                <div class="problem-statement">
+                    <strong>Problem:</strong> Design suitable data structures and implement Pass-I of a two-pass macro processor using OOP features in C++. Output: MNT, MDT, ALA & Intermediate code file without macro definitions.
+                </div>
+                
+                <div class="features">
+                    <h3>Features:</h3>
+                    <ul>
+                        <li>✓ Creates Macro Name Table (MNT) with parameter count</li>
+                        <li>✓ Generates Macro Definition Table (MDT) with positional parameters</li>
+                        <li>✓ Builds Argument List Array (ALA) for formal parameters</li>
+                        <li>✓ Produces intermediate code without macro definitions</li>
+                    </ul>
+                </div>
+                
+                <div class="section-title">💻 C++ Code</div>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+#include &lt;sstream&gt;
+#include &lt;vector&gt;
+#include &lt;unordered_map&gt;
+using namespace std;
+
+class MacroPass1 {
+private:
+    ifstream input;
+    ofstream mntFile, mdtFile, alaFile, irFile;
+
+    struct MNTEntry {
+        string name;
+        int paramCount;
+        int mdtIndex;
+    };
+
+    vector&lt;MNTEntry&gt; MNT;
+    vector&lt;string&gt; MDT;
+    vector&lt;string&gt; ALA;
+
+public:
+    MacroPass1(string inputFile) {
+        input.open(inputFile);
+        mntFile.open("MNT.txt");
+        mdtFile.open("MDT.txt");
+        alaFile.open("ALA.txt");
+        irFile.open("Intermediate.txt");
+    }
+
+    void process() {
+        string line;
+        while (getline(input, line)) {
+            stringstream ss(line);
+            string word;
+            ss &gt;&gt; word;
+
+            if (word == "MACRO") {
+                processMacro();
+            } else {
+                irFile &lt;&lt; line &lt;&lt; "\n";
+            }
+        }
+
+        writeTables();
+        cout &lt;&lt; "✓ Macro Pass-I Completed\n";
+        cout &lt;&lt; "Generated: MNT.txt, MDT.txt, ALA.txt, Intermediate.txt\n";
+    }
+
+private:
+    void processMacro() {
+        string proto;
+        getline(input, proto);
+        stringstream ps(proto);
+
+        string macroName;
+        ps &gt;&gt; macroName;
+
+        ALA.clear();
+        string param;
+        while (ps &gt;&gt; param) {
+            ALA.push_back(param);
+        }
+
+        MNT.push_back({macroName, (int)ALA.size(), (int)MDT.size() + 1});
+
+        string bodyLine;
+        while (getline(input, bodyLine)) {
+            if (bodyLine == "MEND") {
+                MDT.push_back("MEND");
+                break;
+            }
+
+            for (int i = 0; i &lt; ALA.size(); i++) {
+                size_t pos = bodyLine.find(ALA[i]);
+                if (pos != string::npos)
+                    bodyLine.replace(pos, ALA[i].length(), "#" + to_string(i));
+            }
+            MDT.push_back(bodyLine);
+        }
+    }
+
+    void writeTables() {
+        for (auto &amp;e : MNT)
+            mntFile &lt;&lt; e.name &lt;&lt; "\t" &lt;&lt; e.paramCount &lt;&lt; "\t" 
+                    &lt;&lt; e.mdtIndex &lt;&lt; "\n";
+
+        for (int i = 0; i &lt; MDT.size(); i++)
+            mdtFile &lt;&lt; (i+1) &lt;&lt; "\t" &lt;&lt; MDT[i] &lt;&lt; "\n";
+
+        for (int i = 0; i &lt; ALA.size(); i++)
+            alaFile &lt;&lt; i &lt;&lt; "\t" &lt;&lt; ALA[i] &lt;&lt; "\n";
+    }
+};
+
+int main() {
+    MacroPass1 processor("macro_input.txt");
+    processor.process();
+    return 0;
+}</code></pre>
+                </div>
+                
+                <div class="section-title">📝 Example Input (macro_input.txt)</div>
+                <div class="io-box">
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre><code class="language-none">MACRO
+M1 A B
+ADD A
+SUB B
+MEND
+START 100
+M1 10 20
+END</code></pre>
+                    </div>
+                </div>
+                
+                <div class="section-title">📤 Expected Output</div>
+                <div class="io-box">
+                    <h4>MNT.txt</h4>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre><code class="language-none">M1	2	1</code></pre>
+                    </div>
+                </div>
+                
+                <div class="io-box">
+                    <h4>MDT.txt</h4>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre><code class="language-none">1	ADD #0
+2	SUB #1
+3	MEND</code></pre>
+                    </div>
+                </div>
+                
+                <div class="io-box">
+                    <h4>ALA.txt</h4>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre><code class="language-none">0	A
+1	B</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Assignment 4 -->
+            <div class="assignment" id="assignment-4" data-keywords="4 macro processor pass-2 pass-ii expansion">
+                <span class="assignment-number">Assignment 4</span>
+                <h2>Two-Pass Macro Processor (Pass-II)</h2>
+                
+                <div class="problem-statement">
+                    <strong>Problem:</strong> Implement Pass-II of a two-pass macro processor using OOP features in C++. The output of Pass-I (MNT, MDT, ALA & Intermediate code) should be input for Pass-II.
+                </div>
+                
+                <div class="features">
+                    <h3>Features:</h3>
+                    <ul>
+                        <li>✓ Expands macro calls with actual arguments</li>
+                        <li>✓ Replaces formal parameters with actual values</li>
+                        <li>✓ Builds dynamic ALA for each macro invocation</li>
+                        <li>✓ Generates final expanded code</li>
+                    </ul>
+                </div>
+                
+                <div class="section-title">💻 C++ Code</div>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int main() {
+    ifstream mntFile("MNT.txt");
+    ifstream mdtFile("MDT.txt");
+    ifstream icFile("Intermediate.txt");
+    ofstream out("output_pass2.txt");
+
+    map&lt;string,int&gt; MNT;
+    string macroName;
+    int startIndex, paramCount;
+
+    while (mntFile &gt;&gt; macroName &gt;&gt; paramCount &gt;&gt; startIndex) {
+        MNT[macroName] = startIndex;
+    }
+
+    vector&lt;string&gt; MDT;
+    string line;
+    int idx;
+    while (mdtFile &gt;&gt; idx) {
+        getline(mdtFile, line);
+        MDT.push_back(line);
+    }
+
+    while (getline(icFile, line)) {
+        stringstream ss(line);
+        ss &gt;&gt; macroName;
+
+        if (MNT.count(macroName)) {
+            vector&lt;string&gt; actualArgs;
+            string arg;
+            while (ss &gt;&gt; arg) actualArgs.push_back(arg);
+
+            map&lt;string,string&gt; ALA;
+            int mdtPtr = MNT[macroName] - 1;
+
+            stringstream formals(MDT[mdtPtr]);
+            string temp, formal;
+            formals &gt;&gt; temp;
+
+            int argIndex = 0;
+            while (formals &gt;&gt; formal) {
+                ALA["#" + to_string(argIndex)] = actualArgs[argIndex];
+                argIndex++;
+            }
+
+            mdtPtr++;
+            while (MDT[mdtPtr].find("MEND") == string::npos) {
+                string expanded = MDT[mdtPtr];
+
+                for (auto &amp;x : ALA) {
+                    size_t pos;
+                    while ((pos = expanded.find(x.first)) != string::npos) {
+                        expanded.replace(pos, x.first.length(), x.second);
+                    }
+                }
+
+                out &lt;&lt; expanded &lt;&lt; "\n";
+                mdtPtr++;
+            }
+        }
+        else {
+            out &lt;&lt; line &lt;&lt; "\n";
+        }
+    }
+
+    cout &lt;&lt; "Macro Pass-II done\n";
+    return 0;
+}</code></pre>
+                </div>
+                
+                <div class="section-title">📝 Example Input (from Pass-I)</div>
+                <div class="io-box">
+                    <h4>Use outputs from Assignment 3</h4>
+                </div>
+                
+                <div class="section-title">📤 Expected Output</div>
+                <div class="io-box">
+                    <h4>output_pass2.txt</h4>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre><code class="language-none">START 100
+ADD 10
+SUB 20
+END</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Assignment 5 -->
+            <div class="assignment" id="assignment-5" data-keywords="5 cpu scheduling fcfs sjf priority round robin">
+                <span class="assignment-number">Assignment 5</span>
+                <h2>CPU Scheduling Algorithms</h2>
+                
+                <div class="problem-statement">
+                    <strong>Problem:</strong> Write a program to simulate CPU Scheduling Algorithms: FCFS, SJF (Preemptive), Priority (Non-Preemptive) and Round Robin (Preemptive).
+                </div>
+                
+                <div class="features">
+                    <h3>Features:</h3>
+                    <ul>
+                        <li>✓ Implements all 4 scheduling algorithms</li>
+                        <li>✓ Calculates waiting time and turnaround time</li>
+                        <li>✓ Displays average WT and TAT</li>
+                        <li>✓ Uses process structure for clean organization</li>
+                    </ul>
+                </div>
+                
+                <div class="section-title">💻 C++ Code</div>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+struct Process {
+    int id, at, bt, bt_remaining, priority;
+    int wt, tat, ct;
+};
+
+void FCFS(vector&lt;Process&gt; p) {
+    int time = 0;
+    for(auto &amp;pr : p) {
+        if(time &lt; pr.at) time = pr.at;
+        pr.wt = time - pr.at;
+        time += pr.bt;
+        pr.tat = pr.wt + pr.bt;
+    }
+
+    cout &lt;&lt; "\nFCFS Scheduling:\nPID\tAT\tBT\tWT\tTAT\n";
+    float totalWT=0,totalTAT=0;
+    for(auto &amp;pr : p){
+        cout&lt;&lt;pr.id&lt;&lt;"\t"&lt;&lt;pr.at&lt;&lt;"\t"&lt;&lt;pr.bt&lt;&lt;"\t"&lt;&lt;pr.wt&lt;&lt;"\t"&lt;&lt;pr.tat&lt;&lt;"\n";
+        totalWT+=pr.wt; totalTAT+=pr.tat;
+    }
+    cout &lt;&lt; "Average WT = " &lt;&lt; totalWT/p.size() &lt;&lt; "\n";
+    cout &lt;&lt; "Average TAT = " &lt;&lt; totalTAT/p.size() &lt;&lt; "\n";
+}
+
+void SJF_Preemptive(vector&lt;Process&gt; p) {
+    int completed = 0, time = 0, n = p.size();
+    for(auto &amp;pr : p) pr.bt_remaining = pr.bt;
+
+    while(completed &lt; n) {
+        int idx = -1, minBT = 1e9;
+        for(int i=0;i&lt;n;i++)
+            if(p[i].at &lt;= time &amp;&amp; p[i].bt_remaining &gt; 0 &amp;&amp; 
+               p[i].bt_remaining &lt; minBT)
+                minBT = p[i].bt_remaining, idx = i;
+
+        if(idx == -1) { time++; continue; }
+
+        p[idx].bt_remaining--;
+        time++;
+
+        if(p[idx].bt_remaining == 0) {
+            completed++;
+            p[idx].ct = time;
+            p[idx].tat = p[idx].ct - p[idx].at;
+            p[idx].wt = p[idx].tat - p[idx].bt;
+        }
+    }
+
+    cout &lt;&lt; "\nSJF Preemptive:\nPID\tAT\tBT\tWT\tTAT\n";
+    float totalWT=0,totalTAT=0;
+    for(auto &amp;pr : p){
+        cout&lt;&lt;pr.id&lt;&lt;"\t"&lt;&lt;pr.at&lt;&lt;"\t"&lt;&lt;pr.bt&lt;&lt;"\t"&lt;&lt;pr.wt&lt;&lt;"\t"&lt;&lt;pr.tat&lt;&lt;"\n";
+        totalWT+=pr.wt; totalTAT+=pr.tat;
+    }
+    cout &lt;&lt; "Average WT = " &lt;&lt; totalWT/n &lt;&lt; "\n";
+    cout &lt;&lt; "Average TAT = " &lt;&lt; totalTAT/n &lt;&lt; "\n";
+}
+
+void Priority_NonPre(vector&lt;Process&gt; p) {
+    sort(p.begin(), p.end(), [](Process &amp;a, Process &amp;b){ 
+        return a.at &lt; b.at; 
+    });
+
+    int time = 0, completed = 0, n = p.size();
+    for(auto &amp;pr : p) pr.bt_remaining = pr.bt;
+    
+    while(completed &lt; n) {
+        int idx=-1, bestPriority=1e9;
+        for(int i=0;i&lt;n;i++)
+            if(p[i].at &lt;= time &amp;&amp; p[i].bt_remaining&gt;0 &amp;&amp; 
+               p[i].priority &lt; bestPriority)
+                bestPriority = p[i].priority, idx=i;
+
+        if(idx==-1) { time++; continue; }
+
+        time += p[idx].bt;
+        p[idx].ct = time;
+        p[idx].tat = p[idx].ct - p[idx].at;
+        p[idx].wt = p[idx].tat - p[idx].bt;
+        p[idx].bt_remaining = 0;
+        completed++;
+    }
+
+    cout &lt;&lt; "\nPriority (Non-Preemptive):\nPID\tAT\tBT\tP\tWT\tTAT\n";
+    float totalWT=0,totalTAT=0;
+    for(auto &amp;pr : p){
+        cout&lt;&lt;pr.id&lt;&lt;"\t"&lt;&lt;pr.at&lt;&lt;"\t"&lt;&lt;pr.bt&lt;&lt;"\t"
+            &lt;&lt;pr.priority&lt;&lt;"\t"&lt;&lt;pr.wt&lt;&lt;"\t"&lt;&lt;pr.tat&lt;&lt;"\n";
+        totalWT+=pr.wt; totalTAT+=pr.tat;
+    }
+    cout &lt;&lt; "Average WT = " &lt;&lt; totalWT/n &lt;&lt; "\n";
+    cout &lt;&lt; "Average TAT = " &lt;&lt; totalTAT/n &lt;&lt; "\n";
+}
+
+void RoundRobin(vector&lt;Process&gt; p, int quantum) {
+    for(auto &amp;pr : p) pr.bt_remaining = pr.bt;
+
+    int time = 0, completed = 0, n = p.size();
+    while(completed &lt; n){
+        bool done = true;
+        for(int i=0;i&lt;n;i++){
+            if(p[i].bt_remaining &gt; 0){
+                done=false;
+                if(p[i].bt_remaining &gt; quantum){
+                    time += quantum;
+                    p[i].bt_remaining -= quantum;
+                }
+                else{
+                    time += p[i].bt_remaining;
+                    p[i].tat = time - p[i].at;
+                    p[i].wt = p[i].tat - p[i].bt;
+                    p[i].bt_remaining = 0;
+                    completed++;
+                }
+            }
+        }
+        if(done) break;
+    }
+
+    cout &lt;&lt; "\nRound Robin:\nPID\tAT\tBT\tWT\tTAT\n";
+    float totalWT=0,totalTAT=0;
+    for(auto &amp;pr : p){
+        cout&lt;&lt;pr.id&lt;&lt;"\t"&lt;&lt;pr.at&lt;&lt;"\t"&lt;&lt;pr.bt&lt;&lt;"\t"&lt;&lt;pr.wt&lt;&lt;"\t"&lt;&lt;pr.tat&lt;&lt;"\n";
+        totalWT+=pr.wt; totalTAT+=pr.tat;
+    }
+    cout &lt;&lt; "Average WT = " &lt;&lt; totalWT/n &lt;&lt; "\n";
+    cout &lt;&lt; "Average TAT = " &lt;&lt; totalTAT/n &lt;&lt; "\n";
+}
+
+int main(){
+    int n;
+    cout&lt;&lt;"Enter number of processes: ";
+    cin&gt;&gt;n;
+
+    vector&lt;Process&gt; p(n);
+    for(int i=0;i&lt;n;i++){
+        p[i].id = i+1;
+        cout&lt;&lt;"Enter AT BT Priority for P"&lt;&lt;p[i].id&lt;&lt;": ";
+        cin&gt;&gt;p[i].at&gt;&gt;p[i].bt&gt;&gt;p[i].priority;
+    }
+
+    FCFS(p);
+    SJF_Preemptive(p);
+    Priority_NonPre(p);
+
+    int q;
+    cout &lt;&lt; "\nEnter Quantum for RR: ";
+    cin &gt;&gt; q;
+    RoundRobin(p,q);
+
+    return 0;
+}</code></pre>
+                </div>
+                
+                <div class="section-title">📝 Example Input</div>
+                <div class="io-box">
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre><code class="language-none">4
+0 5 2
+1 3 1
+2 8 4
+3 6 3
+2</code></pre>
+                    </div>
+                </div>
+                
+                <div class="section-title">📤 Example Output</div>
+                <div class="io-box">
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre><code class="language-none">FCFS Scheduling:
+PID	AT	BT	WT	TAT
+1	0	5	0	5
+2	1	3	4	7
+3	2	8	10	18
+4	3	6	15	21
+Average WT = 7.25
+Average TAT = 12.75</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Assignment 6 -->
+            <div class="assignment" id="assignment-6" data-keywords="6 memory placement first fit best fit worst fit next fit">
+                <span class="assignment-number">Assignment 6</span>
+                <h2>Memory Placement Strategies</h2>
+                
+                <div class="problem-statement">
+                    <strong>Problem:</strong> Write a program to simulate Memory placement strategies: First Fit, Best Fit, Worst Fit, and Next Fit.
+                </div>
+                
+                <div class="features">
+                    <h3>Features:</h3>
+                    <ul>
+                        <li>✓ Variable partitioning with space reduction</li>
+                        <li>✓ All four memory allocation strategies</li>
+                        <li>✓ Handles remaining space correctly</li>
+                        <li>✓ Shows allocation results for each strategy</li>
+                    </ul>
+                </div>
+                
+                <div class="section-title">💻 C++ Code</div>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+void printAllocation(const vector&lt;int&gt; &amp;processSize, 
+                     const vector&lt;int&gt; &amp;blockAllocation) {
+    cout &lt;&lt; "\nProcess No.\tProcess Size\tBlock Allocated\n";
+    for (size_t i = 0; i &lt; processSize.size(); i++) {
+        cout &lt;&lt; "   " &lt;&lt; i + 1 &lt;&lt; "\t\t" &lt;&lt; processSize[i] &lt;&lt; "\t\t";
+        if (blockAllocation[i] != -1)
+            cout &lt;&lt; blockAllocation[i] + 1;
+        else
+            cout &lt;&lt; "Not Allocated";
+        cout &lt;&lt; endl;
+    }
+}
+
+void firstFit(vector&lt;int&gt; blockSize, const vector&lt;int&gt; &amp;processSize) {
+    vector&lt;int&gt; blockAllocation(processSize.size(), -1);
+
+    for (size_t i = 0; i &lt; processSize.size(); i++) {
+        for (size_t j = 0; j &lt; blockSize.size(); j++) {
+            if (blockSize[j] &gt;= processSize[i]) {
+                blockAllocation[i] = j;
+                blockSize[j] -= processSize[i];
+                break;
+            }
+        }
+    }
+
+    cout &lt;&lt; "\n--- FIRST FIT ---";
+    printAllocation(processSize, blockAllocation);
+}
+
+void bestFit(vector&lt;int&gt; blockSize, const vector&lt;int&gt; &amp;processSize) {
+    vector&lt;int&gt; blockAllocation(processSize.size(), -1);
+
+    for (size_t i = 0; i &lt; processSize.size(); i++) {
+        int bestIndex = -1;
+        for (size_t j = 0; j &lt; blockSize.size(); j++) {
+            if (blockSize[j] &gt;= processSize[i]) {
+                if (bestIndex == -1 || blockSize[j] &lt; blockSize[bestIndex])
+                    bestIndex = j;
+            }
+        }
+
+        if (bestIndex != -1) {
+            blockAllocation[i] = bestIndex;
+            blockSize[bestIndex] -= processSize[i];
+        }
+    }
+
+    cout &lt;&lt; "\n--- BEST FIT ---";
+    printAllocation(processSize, blockAllocation);
+}
+
+void worstFit(vector&lt;int&gt; blockSize, const vector&lt;int&gt; &amp;processSize) {
+    vector&lt;int&gt; blockAllocation(processSize.size(), -1);
+
+    for (size_t i = 0; i &lt; processSize.size(); i++) {
+        int worstIndex = -1;
+        for (size_t j = 0; j &lt; blockSize.size(); j++) {
+            if (blockSize[j] &gt;= processSize[i]) {
+                if (worstIndex == -1 || blockSize[j] &gt; blockSize[worstIndex])
+                    worstIndex = j;
+            }
+        }
+
+        if (worstIndex != -1) {
+            blockAllocation[i] = worstIndex;
+            blockSize[worstIndex] -= processSize[i];
+        }
+    }
+
+    cout &lt;&lt; "\n--- WORST FIT ---";
+    printAllocation(processSize, blockAllocation);
+}
+
+void nextFit(vector&lt;int&gt; blockSize, const vector&lt;int&gt; &amp;processSize) {
+    vector&lt;int&gt; blockAllocation(processSize.size(), -1);
+    size_t lastPosition = 0;
+
+    for (size_t i = 0; i &lt; processSize.size(); i++) {
+        size_t j = lastPosition;
+
+        do {
+            if (blockSize[j] &gt;= processSize[i]) {
+                blockAllocation[i] = j;
+                blockSize[j] -= processSize[i];
+                lastPosition = j;
+                break;
+            }
+            j = (j + 1) % blockSize.size();
+        } while (j != lastPosition);
+    }
+
+    cout &lt;&lt; "\n--- NEXT FIT ---";
+    printAllocation(processSize, blockAllocation);
+}
+
+int main() {
+    vector&lt;int&gt; blockSize = {100, 500, 200, 300, 600};
+    vector&lt;int&gt; processSize = {212, 417, 112, 426};
+
+    cout &lt;&lt; "Memory Placement Strategies\n";
+    cout &lt;&lt; "Blocks: 100 500 200 300 600\n";
+    cout &lt;&lt; "Processes: 212 417 112 426\n";
+
+    firstFit(blockSize, processSize);
+    bestFit(blockSize, processSize);
+    worstFit(blockSize, processSize);
+    nextFit(blockSize, processSize);
+
+    return 0;
+}</code></pre>
+                </div>
+                
+                <div class="section-title">📝 Example Input</div>
+                <div class="io-box">
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre><code class="language-none">Blocks: 100, 500, 200, 300, 600
+Processes: 212, 417, 112, 426</code></pre>
+                    </div>
+                </div>
+                
+                <div class="section-title">📤 Example Output</div>
+                <div class="io-box">
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        <pre><code class="language-none">--- FIRST FIT ---
+Process No.	Process Size	Block Allocated
+   1		212		2
+   2		417		5
+   3		112		2
+   4		426		Not Allocated</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Prism.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+    
+    <script>
+        // Copy functionality
+        function copyCode(button) {
+            const code = button.nextElementSibling.querySelector('code');
+            const text = code.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const original = button.textContent;
+                button.textContent = '✓ Copied!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.textContent = original;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                alert('Copy failed. Please try selecting the text manually.');
+            });
+        }
+        
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const assignments = document.querySelectorAll('.assignment');
+        
+        searchInput.addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase().trim();
+            let visible = 0;
+            
+            assignments.forEach(assignment => {
+                const keywords = assignment.getAttribute('data-keywords').toLowerCase();
+                const content = assignment.textContent.toLowerCase();
+                
+                if (term === '' || keywords.includes(term) || content.includes(term)) {
+                    assignment.style.display = 'block';
+                    visible++;
+                } else {
+                    assignment.style.display = 'none';
+                }
+            });
+            
+            const existing = document.querySelector('.no-results');
+            if (existing) existing.remove();
+            
+            if (visible === 0 && term !== '') {
+                const msg = document.createElement('div');
+                msg.className = 'no-results';
+                msg.textContent = '😔 No assignments found for "' + term + '"';
+                document.getElementById('content').appendChild(msg);
+            }
+        });
+        
+        // Quick jump to assignment
+        function jumpToAssignment(num) {
+            const assignment = document.getElementById('assignment-' + num);
+            if (assignment) {
+                assignment.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                searchInput.value = num;
+                searchInput.dispatchEvent(new Event('input'));
+            }
+        }
+        
+        // PDF download
+        function downloadPDF() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'flex';
+            
+            // Show all assignments temporarily
+            assignments.forEach(a => a.style.display = 'block');
+            
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            const content = document.getElementById('mainContent');
+            
+            html2canvas(content, {
+                scale: 2,
+                useCORS: true,
+                logging: false,
+                backgroundColor: '#ffffff'
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const imgWidth = 210;
+                const pageHeight = 297;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    doc.addPage();
+                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                doc.save('System_Programming_Lab_Manual.pdf');
+                loading.style.display = 'none';
+            }).catch(error => {
+                console.error('PDF error:', error);
+                alert('PDF generation failed. Please try again.');
+                loading.style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html>
